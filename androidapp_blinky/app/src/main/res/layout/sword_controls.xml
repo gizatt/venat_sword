@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2018, Nordic Semiconductor
+  ~ All rights reserved.
+  ~
+  ~ Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+  ~
+  ~ 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+  ~
+  ~ 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the
+  ~ documentation and/or other materials provided with the distribution.
+  ~
+  ~ 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this
+  ~ software without specific prior written permission.
+  ~
+  ~ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  ~ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  ~ HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  ~ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+  ~ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+  ~ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<com.flask.colorpicker.ColorPickerView
+		android:id="@+id/color_picker_view"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="30dp"
+		android:layout_marginEnd="16dp"
+		app:alphaSlider="true"
+		app:alphaSliderView="@+id/v_alpha_slider"
+		app:density="12"
+		app:layout_constraintBottom_toTopOf="@+id/brightness_slider"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.0"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:lightnessSlider="true"
+		app:lightnessSliderView="@+id/brightness_slider"
+		app:wheelType="FLOWER" />
+
+	<com.flask.colorpicker.slider.LightnessSlider
+		android:id="@+id/brightness_slider"
+		android:layout_width="0dp"
+		android:layout_height="36dp"
+		android:layout_marginStart="64dp"
+		android:layout_marginTop="16dp"
+		android:layout_marginEnd="64dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.0"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/color_picker_view"
+		app:layout_constraintVertical_bias="0.0" />
+
+	<ToggleButton
+		android:id="@+id/on_off_button"
+		android:layout_width="142dp"
+		android:layout_height="91dp"
+		android:layout_marginStart="32dp"
+		android:layout_marginTop="28dp"
+		android:text="ToggleButton"
+		android:textColor="#000000"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/brightness_slider" />
+
+	<ProgressBar
+		android:id="@+id/battery_bar"
+		style="?android:attr/progressBarStyleHorizontal"
+		android:layout_width="152dp"
+		android:layout_height="47dp"
+		android:layout_marginTop="29dp"
+		android:indeterminate="false"
+		android:max="100"
+		android:progress="0"
+		android:scaleY="5"
+		app:layout_constraintEnd_toEndOf="@+id/battery_bar_text"
+		app:layout_constraintStart_toStartOf="@+id/battery_bar_text"
+		app:layout_constraintTop_toBottomOf="@+id/brightness_slider" />
+
+	<TextView
+		android:id="@+id/battery_bar_text"
+		android:layout_width="120dp"
+		android:layout_height="42dp"
+		android:layout_marginTop="2dp"
+		android:layout_marginEnd="77dp"
+		android:ems="10"
+		android:gravity="center_horizontal"
+		android:text="3.2V"
+		android:textSize="24sp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/battery_bar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
