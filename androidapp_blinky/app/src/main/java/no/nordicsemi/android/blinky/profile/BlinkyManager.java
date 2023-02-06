@@ -43,8 +43,10 @@ import no.nordicsemi.android.blinky.BuildConfig;
 import no.nordicsemi.android.blinky.profile.callback.BlinkyBatteryDataCallback;
 import no.nordicsemi.android.blinky.profile.callback.BlinkyColorDataCallback;
 import no.nordicsemi.android.blinky.profile.callback.BlinkyOnOffDataCallback;
+import no.nordicsemi.android.blinky.profile.callback.BlinkyModeDataCallback;
 import no.nordicsemi.android.blinky.profile.data.BlinkyColorState;
 import no.nordicsemi.android.blinky.profile.data.BlinkyOnOffState;
+import no.nordicsemi.android.blinky.profile.data.BlinkyModeState;
 import no.nordicsemi.android.log.LogContract;
 import no.nordicsemi.android.log.LogSession;
 import no.nordicsemi.android.log.Logger;
@@ -56,13 +58,15 @@ public class BlinkyManager extends ObservableBleManager {
 	private final static UUID LBS_UUID_ONOFF_CHAR = UUID.fromString("198a8001-2ab7-414c-9459-47e3d418a7fd");
 	private final static UUID LBS_UUID_COLOR_CHAR = UUID.fromString("198a8002-2ab7-414c-9459-47e3d418a7fd");
 	private final static UUID LBS_UUID_BATTERY_CHAR = UUID.fromString("198a8003-2ab7-414c-9459-47e3d418a7fd");
+	private final static UUID LBS_UUID_MODE_CHAR = UUID.fromString("198a8005-2ab7-414c-9459-47e3d418a7fd");
 	// TODO: Add battery state.
 
 	private final MutableLiveData<Boolean> onOffState = new MutableLiveData<>();
 	private final MutableLiveData<Float> batteryState = new MutableLiveData<>();
 	private final MutableLiveData<Integer> colorState = new MutableLiveData<>();
+	private final MutableLiveData<Integer> modeState = new MutableLiveData<>();
 
-	private BluetoothGattCharacteristic colorCharacteristic, onOffCharacteristic, batteryCharacteristic;
+	private BluetoothGattCharacteristic colorCharacteristic, onOffCharacteristic, batteryCharacteristic, modeCharacteristic;
 	private LogSession logSession;
 	private boolean supported;
 
@@ -78,6 +82,9 @@ public class BlinkyManager extends ObservableBleManager {
 	}
 	public final LiveData<Integer> getColorState() {
 		return colorState;
+	}
+	public final LiveData<Integer> getModeState() {
+		return modeState;
 	}
 
 	@NonNull
@@ -173,6 +180,26 @@ public class BlinkyManager extends ObservableBleManager {
 	};
 
 	/**
+	 * The mode callback will be notified when the mode state was read or sent to the target device.
+	 */
+	private final BlinkyModeDataCallback modeCallback = new BlinkyModeDataCallback() {
+		@SuppressLint("WrongConstant")
+		@Override
+		public void onModeStateChanged(@NonNull final BluetoothDevice device,
+										  final Integer mode) {
+			log(LogContract.Log.Level.APPLICATION, "Mode state " + mode);
+			modeState.setValue(mode);
+		}
+
+		@Override
+		public void onInvalidDataReceived(@NonNull final BluetoothDevice device,
+										  @NonNull final Data data) {
+			// Data can only invalid if we read them. We assume the app always sends correct data.
+			log(Log.WARN, "Invalid data received: " + data);
+		}
+	};
+
+	/**
 	 * BluetoothGatt callbacks object.
 	 */
 	private class BlinkyBleManagerGattCallback extends BleManagerGattCallback {
@@ -192,6 +219,7 @@ public class BlinkyManager extends ObservableBleManager {
 				onOffCharacteristic = service.getCharacteristic(LBS_UUID_ONOFF_CHAR);
 				colorCharacteristic = service.getCharacteristic(LBS_UUID_COLOR_CHAR);
 				batteryCharacteristic = service.getCharacteristic(LBS_UUID_BATTERY_CHAR);
+				modeCharacteristic = service.getCharacteristic(LBS_UUID_MODE_CHAR);
 			}
 
 			boolean onOffWriteRequest = false;
@@ -208,7 +236,14 @@ public class BlinkyManager extends ObservableBleManager {
 				log(Log.VERBOSE, "color writeRequest " + colorWriteRequest);
 			}
 
-			supported = colorCharacteristic != null && onOffCharacteristic != null && batteryCharacteristic != null && onOffWriteRequest && colorWriteRequest;
+			boolean modeWriteRequest = false;
+			if (modeCharacteristic != null) {
+				final int modeProperties = modeCharacteristic.getProperties();
+				modeWriteRequest = (modeProperties & BluetoothGattCharacteristic.PROPERTY_WRITE) > 0;
+				log(Log.VERBOSE, "mode writeRequest " + modeWriteRequest);
+			}
+
+			supported = colorCharacteristic != null && onOffCharacteristic != null && batteryCharacteristic != null && onOffWriteRequest && colorWriteRequest && modeWriteRequest;
 			log(Log.VERBOSE, "supported " + supported);
 			return supported;
 		}
@@ -218,6 +253,7 @@ public class BlinkyManager extends ObservableBleManager {
 			colorCharacteristic = null;
 			onOffCharacteristic = null;
 			batteryCharacteristic = null;
+			modeCharacteristic = null;
 		}
 	}
 
@@ -257,5 +293,18 @@ public class BlinkyManager extends ObservableBleManager {
 
 	public void updateBatteryState() {
 		readCharacteristic(batteryCharacteristic).with(batteryCallback).enqueue();
+	}
+
+	public void setMode(final Integer mode) {
+		// Are we connected?
+		if (modeCharacteristic == null)
+			return;
+
+		log(Log.VERBOSE, "Sending mode " + mode);
+		writeCharacteristic(
+				modeCharacteristic,
+				BlinkyModeState.setMode(mode),
+				BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+		).with(modeCallback).enqueue();
 	}
 }

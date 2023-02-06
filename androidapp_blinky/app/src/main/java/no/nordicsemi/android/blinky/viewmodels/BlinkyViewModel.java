@@ -66,6 +66,10 @@ public class BlinkyViewModel extends AndroidViewModel {
 		return blinkyManager.getBatteryState();
 	}
 
+	public LiveData<Integer> getModeState() {
+		return blinkyManager.getModeState();
+	}
+
 	/**
 	 * Connect to the given peripheral.
 	 *
@@ -124,6 +128,8 @@ public class BlinkyViewModel extends AndroidViewModel {
 
 	// Should not be necessary...
 	public void updateBatteryState() { blinkyManager.updateBatteryState(); }
+
+	public void setMode(final int mode) { blinkyManager.setMode(mode); }
 
 	@Override
 	protected void onCleared() {

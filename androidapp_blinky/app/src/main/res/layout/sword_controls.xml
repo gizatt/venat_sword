@@ -32,7 +32,7 @@
 		android:layout_marginStart="16dp"
 		android:layout_marginTop="30dp"
 		android:layout_marginEnd="16dp"
-		app:alphaSlider="true"
+		app:alphaSlider="false"
 		app:alphaSliderView="@+id/v_alpha_slider"
 		app:density="12"
 		app:layout_constraintBottom_toTopOf="@+id/brightness_slider"
@@ -40,59 +40,82 @@
 		app:layout_constraintHorizontal_bias="0.0"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
-		app:lightnessSlider="true"
+		app:lightnessSlider="false"
 		app:lightnessSliderView="@+id/brightness_slider"
-		app:wheelType="FLOWER" />
+		app:wheelType="CIRCLE" />
 
 	<com.flask.colorpicker.slider.LightnessSlider
 		android:id="@+id/brightness_slider"
-		android:layout_width="0dp"
-		android:layout_height="36dp"
+		android:layout_width="341dp"
+		android:layout_height="37dp"
 		android:layout_marginStart="64dp"
 		android:layout_marginTop="16dp"
 		android:layout_marginEnd="64dp"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.0"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/color_picker_view"
-		app:layout_constraintVertical_bias="0.0" />
+		app:layout_constraintTop_toBottomOf="@+id/color_picker_view" />
+
+	<Spinner
+		android:id="@+id/mode_spinner"
+		android:layout_width="259dp"
+		android:layout_height="49dp"
+		android:layout_marginTop="12dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.769"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/brightness_slider" />
 
 	<ToggleButton
 		android:id="@+id/on_off_button"
 		android:layout_width="142dp"
 		android:layout_height="91dp"
-		android:layout_marginStart="32dp"
-		android:layout_marginTop="28dp"
+		android:layout_marginStart="48dp"
+		android:layout_marginTop="40dp"
 		android:text="ToggleButton"
 		android:textColor="#000000"
+		app:layout_constraintEnd_toStartOf="@+id/battery_bar"
+		app:layout_constraintHorizontal_bias="0.2"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/brightness_slider" />
+		app:layout_constraintTop_toBottomOf="@+id/mode_spinner" />
 
 	<ProgressBar
 		android:id="@+id/battery_bar"
 		style="?android:attr/progressBarStyleHorizontal"
 		android:layout_width="152dp"
 		android:layout_height="47dp"
-		android:layout_marginTop="29dp"
+		android:layout_marginTop="40dp"
 		android:indeterminate="false"
 		android:max="100"
 		android:progress="0"
 		android:scaleY="5"
 		app:layout_constraintEnd_toEndOf="@+id/battery_bar_text"
+		app:layout_constraintHorizontal_bias="0.593"
 		app:layout_constraintStart_toStartOf="@+id/battery_bar_text"
-		app:layout_constraintTop_toBottomOf="@+id/brightness_slider" />
+		app:layout_constraintTop_toBottomOf="@+id/mode_spinner" />
 
 	<TextView
 		android:id="@+id/battery_bar_text"
 		android:layout_width="120dp"
 		android:layout_height="42dp"
 		android:layout_marginTop="2dp"
-		android:layout_marginEnd="77dp"
+		android:layout_marginEnd="56dp"
 		android:ems="10"
 		android:gravity="center_horizontal"
 		android:text="3.2V"
 		android:textSize="24sp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/battery_bar" />
+
+	<TextView
+		android:id="@+id/editTextTextPersonName"
+		android:layout_width="80dp"
+		android:layout_height="44dp"
+		android:ems="10"
+		android:text="Mode: "
+		android:textSize="24sp"
+		android:gravity="center"
+		app:layout_constraintEnd_toStartOf="@+id/mode_spinner"
+		tools:layout_editor_absoluteY="475dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

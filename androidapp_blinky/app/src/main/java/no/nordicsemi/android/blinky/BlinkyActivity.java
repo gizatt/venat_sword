@@ -25,6 +25,9 @@ package no.nordicsemi.android.blinky;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -40,7 +43,7 @@ import no.nordicsemi.android.blinky.adapter.DiscoveredBluetoothDevice;
 import no.nordicsemi.android.blinky.databinding.ActivityBlinkyBinding;
 import no.nordicsemi.android.blinky.viewmodels.BlinkyViewModel;
 
-public class BlinkyActivity extends AppCompatActivity {
+public class BlinkyActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 	public static final String EXTRA_DEVICE = "no.nordicsemi.android.blinky.EXTRA_DEVICE";
 
 	private BlinkyViewModel viewModel;
@@ -71,6 +74,15 @@ public class BlinkyActivity extends AppCompatActivity {
 		binding.swordControls.onOffButton.setOnCheckedChangeListener((buttonView, isChecked) -> viewModel.setOnOffState(isChecked));
 		binding.swordControls.colorPickerView.addOnColorChangedListener( (color) -> viewModel.setColor(color));
 
+		Spinner spinner = binding.swordControls.modeSpinner;
+		// Create an ArrayAdapter using the string array and a default spinner layout
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+				R.array.sword_modes_array, android.R.layout.simple_spinner_item);
+		// Specify the layout to use when the list of choices appears
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// Apply the adapter to the spinner
+		spinner.setAdapter(adapter);
+		spinner.setOnItemSelectedListener( this );
 		binding.infoNotSupported.actionRetry.setOnClickListener(v -> viewModel.reconnect());
 		binding.infoTimeout.actionRetry.setOnClickListener(v -> viewModel.reconnect());
 
@@ -145,5 +157,15 @@ public class BlinkyActivity extends AppCompatActivity {
 			binding.swordControls.batteryBarText.setText("???");
 			// TODO: Set progress bar text to unknown.
 		}
+	}
+
+	// Spinner callbacks.
+	public void onItemSelected(AdapterView<?> parent, View view,
+							   int pos, long id) {
+		this.viewModel.setMode(pos);
+	}
+
+	public void onNothingSelected(AdapterView<?> parent) {
+		this.viewModel.setMode(0);
 	}
 }

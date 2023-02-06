@@ -14,7 +14,7 @@
     <string name="location_permission_info">From Android 6.0 until 11 the application
         requires Location permission in order to scan for Bluetooth Low Energy devices. This
         is because Bluetooth LE beacons, for example iBeacons or Eddystone, may be used to
-        determine the phone\'s and user\'s location.\n\n<b>nRF Blinky</b> will not use
+        determine the phone\'s and user\'s location.\n\n<b>This app</b> will not use
 		this information in any way.\n\nOn Android 12 and above, a new Bluetooth Scan permission
 		is requested with a flag that prevents using scanning for estimating location, but on this system
         version, unfortunately, no scan results are returned without location enabled.</string>
@@ -26,7 +26,7 @@
     <string name="bluetooth_disabled_info">The Bluetooth adapter is turned off.\nClick the button
         below to enable it.</string>
 
-    <string name="blinky_guide_title">CAN\'T SEE YOUR BLINKY?</string>
+    <string name="blinky_guide_title">CAN\'T SEE YOUR DEVICE?</string>
     <string name="blinky_guide_info">1. <b>Turn on</b> the device and is connect to
 		a power source using a micro USB cable or a coin cell is plugged in.\n\n2. Make sure
         the application advertises LED Button Service (LBS), or change the filter in the menu.</string>

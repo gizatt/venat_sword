@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sword_modes_array">
+        <item>DirectRGB</item>
+        <item>DirectRGBPulsing</item>
+        <item>PartyModeFlowing</item>
+        <item>PartyModeRolling</item>
+    </string-array>
+</resources>
