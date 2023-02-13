@@ -33,7 +33,7 @@ Fancy control modes, and a way to control them:
 // LED strip setup information
 const int PIN_LEDS_UPPER = 10;
 const int PIN_LEDS_LOWER = 8;
-const int N_PIXELS = 1;
+const int N_PIXELS = 3;
 const float MIN_BATTERY_VOLTAGE = 0.0;
 
 Adafruit_NeoPixel pixels_1 = Adafruit_NeoPixel(N_PIXELS, PIN_LEDS_UPPER, NEO_RGB);
@@ -216,7 +216,7 @@ bool setup_ble()
     return false;
   }
   // set advertised local name and service UUID:
-  BLE.setLocalName("Hyth-Bow");
+  BLE.setLocalName("Emet-Claymore");
   BLE.setAdvertisedService(ble_service);
 
   // Add characteristics.

@@ -216,7 +216,7 @@ bool setup_ble()
     return false;
   }
   // set advertised local name and service UUID:
-  BLE.setLocalName("Hyth-Bow");
+  BLE.setLocalName("Hyth-Arrow");
   BLE.setAdvertisedService(ble_service);
 
   // Add characteristics.
