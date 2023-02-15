@@ -19,10 +19,10 @@
 // LED strip setup information
 const int PIN_LEDS_UPPER = 10;
 const int PIN_LEDS_LOWER = 8;
-const int N_PIXELS = 1;
+const int N_PIXELS = 3;
 
-Adafruit_NeoPixel pixels_1 = Adafruit_NeoPixel(N_PIXELS, PIN_LEDS_UPPER, NEO_GRBW);
-Adafruit_NeoPixel pixels_2 = Adafruit_NeoPixel(N_PIXELS, PIN_LEDS_LOWER, NEO_GRBW);
+Adafruit_NeoPixel pixels_1 = Adafruit_NeoPixel(N_PIXELS, PIN_LEDS_UPPER, NEO_GRB);
+Adafruit_NeoPixel pixels_2 = Adafruit_NeoPixel(N_PIXELS, PIN_LEDS_LOWER, NEO_GRB);
 
 PropLEDDriver prop_led_driver;
 StatusLEDManager status_led_manager(LED_BUILTIN);
