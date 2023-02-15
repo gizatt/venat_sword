@@ -41,7 +41,7 @@ public:
   }
   virtual inline void setPixels2Color(int i, uint8_t r, uint8_t g, uint8_t b)
   {
-    m_pixels_1->setPixelColor(i, r, g, b);
+    m_pixels_2->setPixelColor(i, r, g, b);
   }
 
   void turn_off_all_leds()
