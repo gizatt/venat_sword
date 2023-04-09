@@ -28,6 +28,21 @@ public:
   {
   }
 
+  // Hacky support to "grow" into a new mode
+  // by updating more and more pixels as the mode
+  // begins.
+  unsigned long m_last_mode_change_ms = 0;
+  ControlMode m_last_control_mode;
+  unsigned long get_millis_since_last_mode_change()
+  {
+    return millis() - m_last_mode_change_ms;
+  }
+  const int MS_PER_PIXEL = 25;
+  int get_num_leds_to_update(const Adafruit_NeoPixel& pixels){
+    int num_to_update = get_millis_since_last_mode_change() / MS_PER_PIXEL;
+    return max(min(num_to_update, pixels.numPixels()), 0);
+  }
+
   void register_strips(Adafruit_NeoPixel *pixels_1, Adafruit_NeoPixel *pixels_2)
   {
     m_pixels_1 = pixels_1;
@@ -68,7 +83,7 @@ public:
   {
     if (m_pixels_1)
     {
-      for (int i = 0; i <= m_pixels_1->numPixels(); i++)
+      for (int i = 0; i <= get_num_leds_to_update(*m_pixels_1); i++)
       {
         setPixels1Color(i, input.color.r, input.color.g, input.color.b);
       }
@@ -76,7 +91,7 @@ public:
     }
     if (m_pixels_2)
     {
-      for (int i = 0; i <= m_pixels_2->numPixels(); i++)
+      for (int i = 0; i <= get_num_leds_to_update(*m_pixels_2); i++)
       {
         setPixels2Color(i, input.color.r, input.color.g, input.color.b);
       }
@@ -97,7 +112,7 @@ public:
 
     if (m_pixels_1)
     {
-      for (int i = 0; i <= m_pixels_1->numPixels(); i++)
+      for (int i = 0; i <= get_num_leds_to_update(*m_pixels_1); i++)
       {
 
         float x = ((float)i) / 20.;
@@ -108,7 +123,7 @@ public:
     }
     if (m_pixels_2)
     {
-      for (int i = 0; i <= m_pixels_2->numPixels(); i++)
+      for (int i = 0; i <= get_num_leds_to_update(*m_pixels_2); i++)
       {
         float x = ((float)i) / 20.;
         float scale = 1. - dim_amount * get_pulsing_noise(x, input.t);
@@ -137,7 +152,7 @@ public:
     // Blue is always slightly on; R and G cycle out of sync.
     if (m_pixels_1)
     {
-      for (int i = 0; i <= m_pixels_1->numPixels(); i++)
+      for (int i = 0; i <= get_num_leds_to_update(*m_pixels_1); i++)
       {
         float x = i / 100. - 0.5 * input.t;
         uint8_t r = value * (cos(x * 1.) + 1.) / 2.;
@@ -150,7 +165,7 @@ public:
 
     if (m_pixels_2)
     {
-      for (int i = 0; i <= m_pixels_2->numPixels(); i++)
+      for (int i = 0; i <= get_num_leds_to_update(*m_pixels_2); i++)
       {
         float x = i / 100. - 0.5 * input.t;
         uint8_t r = value * (cos(x * 1.) + 1.) / 2.;
@@ -179,7 +194,7 @@ public:
 
     if (m_pixels_1)
     {
-      for (int i = 0; i <= m_pixels_1->numPixels(); i++)
+      for (int i = 0; i <= get_num_leds_to_update(*m_pixels_1); i++)
       {
         setPixels1Color(i, r, g, b);
       }
@@ -188,7 +203,7 @@ public:
 
     if (m_pixels_2)
     {
-      for (int i = 0; i <= m_pixels_2->numPixels(); i++)
+      for (int i = 0; i <= get_num_leds_to_update(*m_pixels_2); i++)
       {
         setPixels2Color(i, r, g, b);
       }
@@ -198,8 +213,14 @@ public:
 
   void update(ControlInput input)
   {
+    if (input.control_mode != m_last_control_mode){
+      m_last_control_mode = input.control_mode;
+      m_last_mode_change_ms = millis();
+    }
+
     if (!input.on_off)
     {
+      m_last_mode_change_ms = millis();
       turn_off_all_leds();
     }
     else
